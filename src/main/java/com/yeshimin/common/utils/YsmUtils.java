@@ -3,12 +3,19 @@ package com.yeshimin.common.utils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class YsmUtils {
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    // ================================================================================
+    // 时间相关
 
     /**
      * LocalDateTime转Date
@@ -31,6 +38,74 @@ public class YsmUtils {
                 .limit(ChronoUnit.DAYS.between(beginDate, endDate.plusDays(1)))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 根据字符串类型的日期生成日期对象
+     * 日期格式：yyyy-MM-dd | yyyy-MM | yyyy
+     * 其他格式不支持
+     */
+    public static LocalDate date(String date) {
+        if (date == null || date.isEmpty()) {
+            throw new IllegalArgumentException("date cannot be null or empty");
+        }
+
+        if (date.length() == 10) {
+            return LocalDate.parse(date, DATE_FORMATTER);
+        } else if (date.length() == 7) {
+            return LocalDate.parse(date + "-01", DATE_FORMATTER);
+        } else if (date.length() == 4) {
+            return LocalDate.parse(date + "-01-01", DATE_FORMATTER);
+        } else {
+            throw new IllegalArgumentException("unsupported date format");
+        }
+    }
+
+    /**
+     * 获取指定日期的月初时间
+     * 例如：2025-03-14 -> 2025-03-01
+     */
+    public static LocalDate monthBegin(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("date cannot be null");
+        }
+        return date.withDayOfMonth(1);
+    }
+
+    /**
+     * 获取指定日期的月末时间
+     * 例如：2025-03-14 -> 2025-03-31
+     */
+    public static LocalDate monthEnd(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("date cannot be null");
+        }
+        return date.withDayOfMonth(date.lengthOfMonth());
+    }
+
+    /**
+     * 获取指定日期的最小时间
+     * 例如：2025-03-14 12:34:56 -> 2025-03-14 00:00:00
+     */
+    public static LocalDateTime minTime(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("date cannot be null");
+        }
+        return date.atStartOfDay();
+    }
+
+    /**
+     * 获取指定日期的最大时间
+     * 例如：2025-03-14 12:34:56 -> 2025-03-14 23:59:59
+     */
+    public static LocalDateTime maxTime(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("date cannot be null");
+        }
+        return date.atTime(23, 59, 59);
+    }
+
+    // 时间相关
+    // ================================================================================
 
     /**
      * 对半拆分map，奇数的话，前面的map中多一个
