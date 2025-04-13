@@ -6,10 +6,25 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class YsmUtils {
+
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    // yyyy-MM-dd
+    private static final Pattern DATE_PATTERN =
+            Pattern.compile("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$");
+    // yyyy-MM-dd HH:mm:ss
+    private static final Pattern DATE_TIME_PATTERN =
+            Pattern.compile("^\\d{4}-(0[1-9]|1[0-2])-" +    // 年-月
+                    "(0[1-9]|[12]\\d|3[01]) " +                   // 日
+                    "([01]\\d|2[0-3]):" +                         // 时（00~23）
+                    "[0-5]\\d:" +                                 // 分（00~59）
+                    "[0-5]\\d$");                                 // 秒（00~59）
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -102,6 +117,26 @@ public class YsmUtils {
             throw new IllegalArgumentException("date cannot be null");
         }
         return date.atTime(23, 59, 59);
+    }
+
+    /**
+     * 判断是否日期格式
+     */
+    public static boolean isDate(String date) {
+        if (date == null || date.isEmpty()) {
+            return false;
+        }
+        return DATE_PATTERN.matcher(date).matches();
+    }
+
+    /**
+     * 判断是否日期时间格式
+     */
+    public static boolean isDateTime(String dateTime) {
+        if (dateTime == null || dateTime.isEmpty()) {
+            return false;
+        }
+        return DATE_TIME_PATTERN.matcher(dateTime).matches();
     }
 
     // 时间相关
