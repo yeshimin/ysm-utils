@@ -27,6 +27,7 @@ public class YsmUtils {
                     "[0-5]\\d$");                                 // 秒（00~59）
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter DATE_FORMATTER_COMPACT = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     // ================================================================================
@@ -137,6 +138,79 @@ public class YsmUtils {
             return false;
         }
         return DATE_TIME_PATTERN.matcher(dateTime).matches();
+    }
+
+    /**
+     * 生成日期字符串
+     */
+    public static String dateStr() {
+        LocalDate date = LocalDate.now();
+        return dateStr(date, DATE_FORMATTER);
+    }
+
+    /**
+     * 生成日期字符串
+     */
+    public static String dateStr(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("date cannot be null");
+        }
+        return dateStr(date, DATE_FORMATTER);
+    }
+
+    /**
+     * 生成日期字符串
+     */
+    public static String dateStr(String format) {
+        if (format == null || format.isEmpty()) {
+            throw new IllegalArgumentException("format cannot be null or empty");
+        }
+        return dateStr(LocalDate.now(), format);
+    }
+
+    /**
+     * 生成日期字符串
+     */
+    public static String dateStr(DateTimeFormatter formatter) {
+        if (formatter == null) {
+            throw new IllegalArgumentException("formatter cannot be null");
+        }
+        return dateStr(LocalDate.now(), formatter);
+    }
+
+    /**
+     * 生成日期字符串
+     *
+     * @param compact 是否紧凑格式
+     */
+    public static String dateStr(boolean compact) {
+        return dateStr(compact ? DATE_FORMATTER_COMPACT : DATE_FORMATTER);
+    }
+
+    /**
+     * 生成日期字符串
+     */
+    public static String dateStr(LocalDate date, String format) {
+        if (date == null) {
+            throw new IllegalArgumentException("date cannot be null");
+        }
+        if (format == null || format.isEmpty()) {
+            throw new IllegalArgumentException("format cannot be null or empty");
+        }
+        return dateStr(date, DateTimeFormatter.ofPattern(format));
+    }
+
+    /**
+     * 生成日期字符串
+     */
+    public static String dateStr(LocalDate date, DateTimeFormatter formatter) {
+        if (date == null) {
+            throw new IllegalArgumentException("date cannot be null");
+        }
+        if (formatter == null) {
+            throw new IllegalArgumentException("formatter cannot be null");
+        }
+        return date.format(formatter);
     }
 
     // 时间相关
