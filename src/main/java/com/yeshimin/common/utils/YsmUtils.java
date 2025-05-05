@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -211,6 +212,17 @@ public class YsmUtils {
             throw new IllegalArgumentException("formatter cannot be null");
         }
         return date.format(formatter);
+    }
+
+    /**
+     * 获取第几周
+     */
+    public static int weekOfYear(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("date cannot be null");
+        }
+        WeekFields weekFields = WeekFields.of(Locale.CHINA);
+        return date.get(weekFields.weekOfYear());
     }
 
     // 时间相关
