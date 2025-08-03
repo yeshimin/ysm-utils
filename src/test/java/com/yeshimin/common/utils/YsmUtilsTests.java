@@ -76,4 +76,18 @@ public class YsmUtilsTests {
         assert maxTime.getMinute() == 59;
         assert maxTime.getSecond() == 59;
     }
+
+    /**
+     * test for `path`
+     */
+    @Test
+    public void testPath() {
+        String path = YsmUtils.path("a", "b", "c", " ", null);
+        System.out.println("path: " + path);
+        assert "a/b/c".equals(path);
+
+        String path2 = YsmUtils.path("4/5/6", null, path);
+        System.out.println("path2: " + path2);
+        assert "4/5/6/a/b/c".equals(path2);
+    }
 }

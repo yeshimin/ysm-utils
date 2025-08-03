@@ -281,4 +281,18 @@ public class YsmUtils {
 
         return Arrays.asList(list1, list2);
     }
+
+    /**
+     * 路径拼接，首部不需要/
+     */
+    public static String path(String... paths) {
+        if (paths == null || paths.length == 0) {
+            return "";
+        }
+        return Stream.of(paths)
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(path -> !path.isEmpty())
+                .collect(Collectors.joining("/"));
+    }
 }
