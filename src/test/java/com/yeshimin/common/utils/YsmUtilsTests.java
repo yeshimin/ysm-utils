@@ -90,4 +90,18 @@ public class YsmUtilsTests {
         System.out.println("path2: " + path2);
         assert "4/5/6/a/b/c".equals(path2);
     }
+
+    /**
+     * test for path escaped
+     */
+    @Test
+    public void testPathEscaped() {
+        boolean escaped = YsmUtils.isPathEscaped("/aa/bb/cc");
+        System.out.println("escaped: " + escaped);
+        assert !escaped;
+
+        escaped = YsmUtils.isPathEscaped("/aa/../dd");
+        System.out.println("escaped: " + escaped);
+        assert escaped;
+    }
 }
