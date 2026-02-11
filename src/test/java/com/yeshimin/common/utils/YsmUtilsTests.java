@@ -104,4 +104,34 @@ public class YsmUtilsTests {
         System.out.println("escaped: " + escaped);
         assert escaped;
     }
+
+    /**
+     * test for checkDateTime
+     */
+    @Test
+    public void testCheckDateTime() {
+        boolean check = YsmUtils.checkDateTime(null, null);
+        System.out.println("check: " + check);
+        assert check;
+
+        check = YsmUtils.checkDateTime(LocalDateTime.now(), null);
+        System.out.println("check: " + check);
+        assert !check;
+
+        check = YsmUtils.checkDateTime(null, LocalDateTime.now());
+        System.out.println("check: " + check);
+        assert !check;
+
+        check = YsmUtils.checkDateTime(LocalDateTime.now(), LocalDateTime.now());
+        System.out.println("check: " + check);
+        assert check;
+
+        check = YsmUtils.checkDateTime(LocalDateTime.now().plusDays(1), LocalDateTime.now());
+        System.out.println("check: " + check);
+        assert !check;
+
+        check = YsmUtils.checkDateTime(LocalDateTime.now(), LocalDateTime.now().plusDays(1));
+        System.out.println("check: " + check);
+        assert check;
+    }
 }
